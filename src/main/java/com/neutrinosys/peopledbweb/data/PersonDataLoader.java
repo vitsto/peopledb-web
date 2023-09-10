@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-@Component
+//@Component
 public class PersonDataLoader implements ApplicationRunner {
     private final PersonRepository personRepository;
 
@@ -22,10 +22,10 @@ public class PersonDataLoader implements ApplicationRunner {
         List<Person> people = null;
         if (personRepository.count() == 0) {
             people = List.of(
-                    new Person(null, "Jake", "Snake", LocalDate.of(1950, 1, 1), new BigDecimal(50000)),
-                    new Person(null, "Sarah", "Smith", LocalDate.of(1960, 2, 1), new BigDecimal(60000)),
-                    new Person(null, "Johny", "Jackson", LocalDate.of(1970, 3, 1), new BigDecimal(70000)),
-                    new Person(null, "Bobby", "Kim", LocalDate.of(1980, 4, 1), new BigDecimal(80000))
+                    new Person(null, "Jake", "Snake", LocalDate.of(1950, 1, 1),"dummy@sample.com", new BigDecimal(50000)),
+                    new Person(null, "Sarah", "Smith", LocalDate.of(1960, 2, 1),"dummy@sample.com", new BigDecimal(60000)),
+                    new Person(null, "Johny", "Jackson", LocalDate.of(1970, 3, 1),"dummy@sample.com", new BigDecimal(70000)),
+                    new Person(null, "Bobby", "Kim", LocalDate.of(1980, 4, 1),"dummy@sample.com", new BigDecimal(80000))
             );
             personRepository.saveAll(people);
         }

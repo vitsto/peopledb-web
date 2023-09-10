@@ -11,7 +11,7 @@ import java.util.Locale;
 @Component
 public class LocalDateFormatter implements Formatter<LocalDate> {
 
-    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy");
+    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
 
     @Override
     public LocalDate parse(String text, Locale locale) throws ParseException {
@@ -20,6 +20,7 @@ public class LocalDateFormatter implements Formatter<LocalDate> {
 
     @Override
     public String print(LocalDate object, Locale locale) {
+//        return dateTimeFormatter.format(object);
         return dateTimeFormatter.format(object);
     }
 }

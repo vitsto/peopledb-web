@@ -8,38 +8,93 @@
 </head>
 <body>
 
-<div class="col-8 mx-auto">
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Last Name</th>
-            <th scope="col">First Name</th>
-            <th scope="col">DOB</th>
-            <th scope="col">Salary</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="person : ${people}">
-            <th scope="row" th:text="${person.id}">1</th>
-            <td th:text="${person.lastName}">Mark</td>
-            <td th:text="${person.firstName}">Otto</td>
-            <td th:text="${{person.dob}}">@mdo</td>
-            <td th:text="${{person.salary}}">@mdo</td>
-        </tr>
-        <tr th:remove="all">
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-        </tr>
-        <tr th:remove="all">
-            <th scope="row">3</th>
-            <td colspan="2">Larry the Bird</td>
-            <td>@twitter</td>
-        </tr>
-        </tbody>
-    </table>
+<div class="col-md-8 col-sm-11 mx-auto mt-5 my-5">
+    <h2 th:text="#{people.list}">People List</h2>
+    <form  method="post" >
+        <table class="table table-bordered table-sm">
+            <thead>
+            <tr>
+                <th scope="col">Select</th>
+                <th scope="col">ID</th>
+                <th scope="col" th:text="#{last.name}">Last Name</th>
+                <th scope="col" th:text="#{first.name}">First Name</th>
+                <th scope="col">DOB</th>
+                <th scope="col" class="d-sm-none d-md-table-cell">Email</th>
+                <th scope="col">Salary</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(people)}">
+                <td colspan="6" class="text-center">No data</td>
+            </tr>
+            <tr th:each="person : ${people}">
+                <td><input class="form-check-input" name="selections" type="checkbox" th:value="${person.id}"></td>
+                <th scope="row" th:text="${person.id}">1</th>
+                <td th:text="${person.lastName}">Mark</td>
+                <td th:text="${person.firstName}">Otto</td>
+<!--                <td th:text="${{person.dob}}">@mdo</td>-->
+                <td th:text="${#temporals.format(person.dob, 'dd/MMM/yyyy')}">@mdo</td>
+                <td th:text="${person.email}" class="d-sm-none d-md-table-cell">@mdo</td>
+                <td th:text="${person.salary}">@mdo</td>
+            </tr>
+            <tr th:remove="all">
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+            </tr>
+            <tr th:remove="all">
+                <th scope="row">3</th>
+                <td colspan="2">Larry the Bird</td>
+                <td>@twitter</td>
+            </tr>
+            </tbody>
+        </table>
+        <button type="submit" name="edit" value="true" class="btn btn-primary mb-5 me-2">Edit</button>
+        <button type="submit" name="delete" value="true" class="btn btn-danger mb-5">Delete</button>
+    </form>
+
+    <h2>Person Form</h2>
+    <form th:object="${person}" method="post" novalidate>
+        <div class="mb-3">
+            <label for="firstName" class="form-label">First Name</label>
+            <input type="text" class="form-control" id="firstName" th:field="*{firstName}" th:errorclass="is-invalid" aria-describedby="firstNameHelp">
+            <div id="validationFirstName" class="invalid-feedback" th:errors="*{firstName}">
+                Please choose a username.
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="lastName" class="form-label">Last Name</label>
+            <input type="text" class="form-control" id="lastName" th:field="*{lastName}" th:errorclass="is-invalid" aria-describedby="lastNameHelp">
+            <div id="validationLastName" class="invalid-feedback" th:errors="*{lastName}">
+                Please choose a username.
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="dob" class="form-label">DOB</label>
+            <input type="date" class="form-control" id="dob" th:field="*{dob}"  th:errorclass="is-invalid" aria-describedby="dobHelp">
+            <div id="validationDob" class="invalid-feedback" th:errors="*{dob}">
+                Please choose a username.
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="email" th:field="*{email}" th:errorclass="is-invalid" aria-describedby="emailHelp">
+            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+            <div id="validationEmail" class="invalid-feedback" th:errors="*{email}">
+                Please choose a username.
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="salary" class="form-label">Salary</label>
+            <input type="number" class="form-control" id="salary" th:field="*{salary}" th:errorclass="is-invalid">
+            <div id="validationSalary" class="invalid-feedback" th:errors="*{salary}">
+                Please choose a username.
+            </div>
+        </div>
+        <input type="hidden" th:field="*{id}" />
+        <button type="submit" class="btn btn-primary">Save Person</button>
+    </form>
 </div>
 </body>
 </html>
