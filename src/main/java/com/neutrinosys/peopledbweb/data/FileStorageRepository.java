@@ -1,5 +1,6 @@
 package com.neutrinosys.peopledbweb.data;
 
+import com.neutrinosys.peopledbweb.exception.StorageException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -33,16 +34,16 @@ public class FileStorageRepository {
         Path dir = Paths.get(storageFolder);
         Path file;
         try {
-            if (!Files.exists(dir)) {
-                Files.createDirectory(dir);
-            }
+//            if (!Files.exists(dir)) {
+//                Files.createDirectory(dir);
+//            }
             file = Files.createFile(Paths.get(dir.toString(), originalFilename));
             BufferedInputStream fis = new BufferedInputStream(inputStream);
             BufferedOutputStream fos = new BufferedOutputStream(new FileOutputStream(file.toFile()));
             fos.write(fis.readAllBytes());
             fis.close(); // no error
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new StorageException(e);
         }
     }
 
@@ -51,8 +52,7 @@ public class FileStorageRepository {
             Path filePath = Path.of(storageFolder).resolve(filename).normalize();
             return new UrlResource(filePath.toUri());
         } catch (MalformedURLException e) {
-            e.fillInStackTrace();
+            throw new StorageException(e);
         }
-        return null;
     }
 }
