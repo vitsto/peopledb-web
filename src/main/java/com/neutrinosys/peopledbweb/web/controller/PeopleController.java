@@ -4,6 +4,9 @@ import com.neutrinosys.peopledbweb.biz.model.Person;
 import com.neutrinosys.peopledbweb.data.FileStorageRepository;
 import com.neutrinosys.peopledbweb.data.PersonRepository;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -14,6 +17,8 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+
+import static java.lang.String.format;
 
 
 @Controller
@@ -42,6 +47,18 @@ public class PeopleController {
     @GetMapping
     public String showPeoplePage(Model model) {
         return "people";
+    }
+
+    @GetMapping("/images/{resource}")
+    public ResponseEntity<Resource> getResource(@PathVariable String resource) {
+        String disposition = """
+                 attachment; filename="%s"
+                """;
+        return ResponseEntity
+                .ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, format(disposition, resource))
+                .body(fileStorageRepository.findByName(resource));
+
     }
 
     @PostMapping
